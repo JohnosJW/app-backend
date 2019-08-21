@@ -18,3 +18,11 @@ Route::post('/login', 'AuthController@login');
 Route::post('/logout', 'AuthController@logout');
 
 Route::get('/user', 'AuthController@user');
+
+Route::group(['prefix' => 'v1'], function () {
+
+    Route::group(['prefix' => 'games', 'middleware' => 'auth:api'], function () {
+
+        Route::post('/', 'GameController@getBonus');
+    });
+});
