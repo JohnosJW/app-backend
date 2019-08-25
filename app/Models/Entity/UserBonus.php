@@ -20,6 +20,8 @@ class UserBonus extends Model
 
     public $fillable = [
         'user_id',
+        'item_bonus_id',
+        'money_bonus_id',
         'type',
         'status'
     ];
