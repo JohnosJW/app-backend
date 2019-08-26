@@ -3,6 +3,7 @@
 namespace App\Services;
 
 
+use App\Models\MoneyBonus;
 use App\Models\User;
 
 class UserService extends BaseService
@@ -14,26 +15,58 @@ class UserService extends BaseService
 
     /**
      * UserService constructor.
-     * @param User $user
      */
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->user = $user;
+        try {
+            $user = auth()->userOrFail();
+            $this->user = $user;
+        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            print_r($e);
+        }
     }
 
     /**
      * @return bool
      */
-    public function haveItemsOrMoney()
+    public function haveItemsOrMoney() : bool
     {
         return $this->user->getUserBonuses()->count() ? true : false;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getMoneyBonus()
+    public function convertUserMoneyBonusToPoints() : int
     {
-        return $this->user->getUserBonuses()->getMoneyBonus()->first();
+        $userMoneyBonus = $this->getMoneyBonus();
+        $userPoints = $userMoneyBonus ? $userMoneyBonus * MoneyBonus::CONVERT_RATE : 0;
+
+        /**
+         * Logic for save results
+         *
+         * try {
+         *
+         *  User $user{money:points} ->update() AND ->save(DB)
+         * ...
+         * }
+         * catch {
+         *  new Exception
+         * ...
+         * }
+         *
+         */
+
+        return $userPoints;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMoneyBonus() : int
+    {
+        $userMoneyBonus = $this->user->getMoneyBonus()->first();
+        $moneyBonus = MoneyBonus::getById($userMoneyBonus->money_bonus_id)->first();
+        return (int) $moneyBonus->name ?? 0;
     }
 }

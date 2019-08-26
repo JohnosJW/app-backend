@@ -7,6 +7,9 @@ use App\Models\Entity\MoneyBonus as MoneyBonusEntity;
 
 class MoneyBonus extends MoneyBonusEntity
 {
+    /** @var int  */
+    const CONVERT_RATE = 10;
+
     /**
      * @return mixed
      */
@@ -32,5 +35,14 @@ class MoneyBonus extends MoneyBonusEntity
         return $this->getAvailableMoneyBonus()
             ->get()
             ->toArray();
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public static function getById(int $id)
+    {
+        return self::where(['id' => $id]);
     }
 }

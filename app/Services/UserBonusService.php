@@ -3,6 +3,8 @@
 namespace App\Services;
 
 
+use App\Models\UserBonus;
+
 class UserBonusService extends BaseService
 {
     /**

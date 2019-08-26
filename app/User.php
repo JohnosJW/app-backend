@@ -2,8 +2,8 @@
 
 namespace App;
 
+use App\Models\UserBonus;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -59,5 +59,22 @@ class User extends Authenticatable implements JWTSubject
     {
         // return a key value array, containing any custom claims to be added JWT
         return [];
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function getUserBonuses()
+    {
+        return $this->hasMany('App\Models\UserBonus');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function getMoneyBonus()
+    {
+        return $this->getUserBonuses()
+            ->where(['type' => UserBonus::TYPE_MONEY]);
     }
 }
