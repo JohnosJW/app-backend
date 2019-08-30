@@ -11,7 +11,7 @@ class UserService extends BaseService
     /**
      * @var User
      */
-    private $user;
+    public $user;
 
     /**
      * UserService constructor.
@@ -68,5 +68,13 @@ class UserService extends BaseService
         $userMoneyBonus = $this->user->getMoneyBonus()->first();
         $moneyBonus = MoneyBonus::getById($userMoneyBonus->money_bonus_id)->first();
         return (int) $moneyBonus->name ?? 0;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApprovalMoneyBonus()
+    {
+        return $this->user->getApprovalMoneyBonus()->first();
     }
 }

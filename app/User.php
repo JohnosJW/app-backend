@@ -77,4 +77,12 @@ class User extends Authenticatable implements JWTSubject
         return $this->getUserBonuses()
             ->where(['type' => UserBonus::TYPE_MONEY]);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function getApprovalMoneyBonus()
+    {
+        return $this->getMoneyBonus()->where(['status' => UserBonus::STATUS_APPROVAL]);
+    }
 }
