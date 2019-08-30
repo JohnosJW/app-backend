@@ -41,7 +41,7 @@ class MoneyBonusService extends BaseService
      */
     public function hasMoneyBonuses()
     {
-        return $this->moneyBonus->getAvailableMoneyBonusCount() > 0 ? true : false;
+        return $this->moneyBonus->getAvailableMoneyBonusCount() > 0;
     }
 
     public function getAvailableBonus()

@@ -22,7 +22,7 @@ class UserService extends BaseService
             $user = auth()->userOrFail();
             $this->user = $user;
         } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            print_r($e);
+            return $e->getMessage();
         }
     }
 

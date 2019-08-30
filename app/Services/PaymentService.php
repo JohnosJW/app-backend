@@ -7,6 +7,7 @@ use App\Models\MoneyBonus;
 use App\Models\Payment;
 use App\Models\UserBonus;
 use Stripe\PaymentIntent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PaymentService extends BaseService
 {
@@ -36,7 +37,7 @@ class PaymentService extends BaseService
     {
         $approvalUserMoneyBonus = $this->userService->getApprovalMoneyBonus();
 
-        if (!$approvalUserMoneyBonus && !isset($approvalUserMoneyBonus->money_bonus_id)) {
+        if (!isset($approvalUserMoneyBonus->money_bonus_id)) {
             return null;
         }
 
@@ -52,7 +53,7 @@ class PaymentService extends BaseService
 
             /** Send Request to API Stripe Pay System (Test Data) wallet info get from wallet table */
             $response = PaymentIntent::create([
-                'amount' => $amount,
+                'amount' => $amount * Payment::AMOUNT_STRIPE_RATE,
                 'currency' => Payment::CURRENCY_USD,
                 'payment_method_types' => [Payment::PAYMENT_METHOD_TYPE_CARD],
                 'receipt_email' => $email,
@@ -62,10 +63,8 @@ class PaymentService extends BaseService
             $approvalUserMoneyBonus->save();
 
             return $response;
-        } catch (\Exception $e) {
-            print_r($e);
-
-            return null;
+        } catch (NotFoundHttpException $exception) {
+            return $exception->getMessage();
         }
     }
 }

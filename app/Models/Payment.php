@@ -13,6 +13,9 @@ class Payment extends Stripe
     /** @var string */
     const PAYMENT_METHOD_TYPE_CARD = "card";
 
+    /** @var int */
+    const AMOUNT_STRIPE_RATE = 100;
+
     /**
      * Payment constructor.
      */
